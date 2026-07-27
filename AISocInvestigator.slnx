@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AISocInvestigator.Api/AISocInvestigator.Api.csproj" />
+    <Project Path="src/AISocInvestigator.Application/AISocInvestigator.Application.csproj" />
+    <Project Path="src/AISocInvestigator.Infrastructure/AISocInvestigator.Infrastructure.csproj" />
+  </Folder>
+</Solution>

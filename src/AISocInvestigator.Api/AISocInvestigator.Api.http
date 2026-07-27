@@ -1,0 +1,6 @@
+@AISocInvestigator.Api_HostAddress = http://localhost:5227
+
+GET {{AISocInvestigator.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
