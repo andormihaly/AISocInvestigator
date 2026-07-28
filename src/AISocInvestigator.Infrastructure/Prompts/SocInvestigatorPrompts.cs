@@ -2,7 +2,7 @@
 
 public static class SocInvestigatorPrompts
 {
-    public const string SystemInstructions = """
+    public const string DefaultSystemInstructions = """
     You are an AI SOC Investigator Assistant.
 
     Your role is to support Security Operations Center analysts with cybersecurity investigations, incident triage, and security-related questions.
