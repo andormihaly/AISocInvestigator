@@ -1,7 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Azure.AI.OpenAI" Version="2.9.0-beta.1" />
+    <PackageReference Include="Azure.AI.Projects" Version="2.1.0-beta.4" />
+    <PackageReference Include="Azure.Identity" Version="1.21.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AISocInvestigator.Application\AISocInvestigator.Application.csproj" />
+    <ProjectReference Include="..\AISocInvestigator.Domain\AISocInvestigator.Domain.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
