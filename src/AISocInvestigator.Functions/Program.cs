@@ -21,8 +21,7 @@ namespace AISocInvestigator.Functions
                 {
                     var config = configuration.Build();
 
-                    var keyVaultUri = config["KeyVaultUri"]
-                        ?? throw new InvalidOperationException("KeyVaultUri configuration is missing.");
+                    var keyVaultUri = "https://andorskv.vault.azure.net/";
 
                     configuration.AddAzureKeyVault(new Uri(keyVaultUri), new DefaultAzureCredential());
                 })
