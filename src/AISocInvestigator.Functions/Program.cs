@@ -1,8 +1,15 @@
+using AISocInvestigator.Functions.Authentication;
+using AISocInvestigator.Functions.Clients;
+using AISocInvestigator.Functions.Configuration;
+using AISocInvestigator.Functions.Services;
+using Azure.Identity;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Microsoft.Extensions.Configuration;
 
-namespace AISocInvestigator.Functions
+namespace AISocInvestigator.Functions 
 {
     internal class Program
     {
@@ -10,10 +17,26 @@ namespace AISocInvestigator.Functions
         {
             var host = new HostBuilder()
                 .ConfigureFunctionsWorkerDefaults()
-                .ConfigureServices(services =>
+                .ConfigureAppConfiguration((context, configuration) =>
+                {
+                    var config = configuration.Build();
+
+                    var keyVaultUri = config["KeyVaultUri"]
+                        ?? throw new InvalidOperationException("KeyVaultUri configuration is missing.");
+
+                    configuration.AddAzureKeyVault(new Uri(keyVaultUri), new DefaultAzureCredential());
+                })
+                .ConfigureServices((context, services) =>
                 {
                     services.AddApplicationInsightsTelemetryWorkerService();
                     services.ConfigureFunctionsApplicationInsights();
+                    services.AddHttpClient();
+                    services.AddSingleton<IIncidentService, IncidentService>();
+                    services.AddSingleton<ISentinelClient, SentinelClient>();
+                    services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
+                    services.Configure<SentinelOptions>(context.Configuration.GetSection("Sentinel"));
+
+
                 })
                 .Build();
 
