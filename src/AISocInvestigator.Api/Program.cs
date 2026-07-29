@@ -32,6 +32,7 @@ builder.Services.AddSingleton<AIProjectClient>(serviceProvider =>
 });
 
 builder.Services.AddScoped<IAIChatService, FoundryChatService>();
+builder.Services.AddScoped<IAIAgentService, SocAgentService>();
 
 builder.Services.AddOpenApi();
 
