@@ -11,17 +11,12 @@ public class GetIncidentFunction(IIncidentService incidentService)
     [Function(nameof(GetIncidentFunction))]
     public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function,"get", Route = "incidents/{id}")] HttpRequestData request, string id)
     {
-        var incident = new Incident
+        var incident = await incidentService.GetIncidentAsync(id);
+
+        if (incident is null)
         {
-            Id = id,
-            Title = "Multiple failed login attempts in app",
-            Severity = "High",
-            Status = "Active",
-            CreatedAt = DateTime.UtcNow,
-            User = "john.doe@contoso.com",
-            SourceIp = "192.168.1.100",
-            Description = "Five failed login attempts detected within five minutes."
-        };
+            return request.CreateResponse(HttpStatusCode.NotFound);
+        }
 
         var response = request.CreateResponse(HttpStatusCode.OK);
 
