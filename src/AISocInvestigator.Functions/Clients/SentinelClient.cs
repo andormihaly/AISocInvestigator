@@ -44,39 +44,45 @@ public class SentinelClient(IHttpClientFactory httpClientFactory, IAccessTokenPr
 
     public async Task<IReadOnlyList<Incident>> GetIncidentsAsync()
     {
-        var workspaceResourceId = new ResourceIdentifier(
-         $"/subscriptions/{sentinelOptions.Value.SentinelSubscriptionId}" +
-         $"/resourceGroups/{sentinelOptions.Value.ResourceGroupName}" +
-         "/providers/Microsoft.OperationalInsights" +
-         $"/workspaces/{sentinelOptions.Value.WorkspaceName}");
-
-        var armClient = new ArmClient(new DefaultAzureCredential());
-
-        var sentinelWorkspace =
-            armClient.GetOperationalInsightsWorkspaceSecurityInsightsResource(
-                workspaceResourceId);
-
-        var incidents = new List<Incident>();
-
-        await foreach (var incidentResource in
-            sentinelWorkspace.GetSecurityInsightsIncidents().GetAllAsync())
+        try
         {
-            var data = incidentResource.Data;
+            var workspaceResourceId = new ResourceIdentifier(
+                $"/subscriptions/{sentinelOptions.Value.SentinelSubscriptionId}" +
+                $"/resourceGroups/{sentinelOptions.Value.ResourceGroupName}" +
+                "/providers/Microsoft.OperationalInsights" +
+                $"/workspaces/{sentinelOptions.Value.WorkspaceName}");
 
-            incidents.Add(new Incident
+            var armClient = new ArmClient(new DefaultAzureCredential());
+
+            var incidents = new List<Incident>();
+
+            await foreach (var incidentResource in armClient
+                .GetSecurityInsightsIncidents(workspaceResourceId)
+                .GetAllAsync())
             {
-                Id = data.Name,
-                Title = data.Title,
-                Severity = data.Severity.ToString(),
-                Status = data.Status.ToString(),
-                Description = data.Description,
-                CreatedAt = data.CreatedOn?.UtcDateTime ?? DateTime.UtcNow,
-                User = string.Empty,
-                SourceIp = string.Empty
-            });
+                var data = incidentResource.Data;
+
+                incidents.Add(new Incident
+                {
+                    Id = data.Name,
+                    Title = data.Title,
+                    Severity = data.Severity.ToString(),
+                    Status = data.Status.ToString(),
+                    Description = data.Description,
+                    CreatedAt = data.CreatedOn?.UtcDateTime ?? DateTime.UtcNow,
+                    User = string.Empty,
+                    SourceIp = string.Empty
+                });
+            }
+
+            return incidents;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Failed to retrieve Sentinel incidents.");
+            Console.WriteLine(ex);
 
-        return incidents;
-
+            throw;
+        }
     }
 }
