@@ -8,9 +8,9 @@ namespace AISocInvestigator.Api.Controllers;
 public sealed class ChatController : BaseApiController
 {
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] string message, CancellationToken cancellationToken)
+    public async Task<IActionResult> Post([FromBody] AskChatRequest request, CancellationToken cancellationToken)
     {
-        var result = await Bus.InvokeAsync<Result<ChatResponse>>(new AskChat(message), cancellationToken);
+        var result = await Bus.InvokeAsync<Result<ChatResponse>>(new AskChat(request.Message,request.PreviousResponseId), cancellationToken);
 
         return HandleResult(result);
     }

@@ -5,5 +5,5 @@ namespace AISocInvestigator.Application.Interfaces;
 
 public interface IAIChatService
 {
-    Task<Result<ChatResponse>> AskAsync(string message, CancellationToken cancellationToken = default);
+    Task<Result<ChatResponse>> AskAsync(string message, string? previousResponseId, CancellationToken cancellationToken = default);
 }

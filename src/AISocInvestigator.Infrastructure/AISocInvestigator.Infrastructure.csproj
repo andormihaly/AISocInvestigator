@@ -11,6 +11,10 @@
     <ProjectReference Include="..\AISocInvestigator.Domain\AISocInvestigator.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="OpenApi\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

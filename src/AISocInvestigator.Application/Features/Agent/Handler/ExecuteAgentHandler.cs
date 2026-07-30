@@ -8,6 +8,6 @@ public sealed class ExecuteAgentHandler(IAIAgentService agentService)
 {
     public async Task<Result<ChatResponse>> Handle(ExecuteAgent request, CancellationToken cancellationToken)
     {
-        return await agentService.ExecuteAsync(request.Request.Message, cancellationToken);
+        return await agentService.ExecuteAsync(request.Request.Message,request.Request.PreviousResponseId, cancellationToken);
     }
 }

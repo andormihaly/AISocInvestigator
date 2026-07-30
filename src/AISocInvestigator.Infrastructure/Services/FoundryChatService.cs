@@ -12,7 +12,7 @@ namespace AISocInvestigator.Infrastructure.Services;
 
 public sealed class FoundryChatService(AIProjectClient aiProjectClient, IOptions<FoundryOptions> options, ILogger<FoundryChatService> logger) : IAIChatService
 {
-    public async Task<Result<ChatResponse>> AskAsync(string message, CancellationToken cancellationToken = default)
+    public async Task<Result<ChatResponse>> AskAsync(string message, string? previousResponseId, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -20,14 +20,15 @@ public sealed class FoundryChatService(AIProjectClient aiProjectClient, IOptions
 
             var requestOptions = new OpenAI.Responses.CreateResponseOptions
             {
-                Instructions = SocInvestigatorPrompts.DefaultSystemInstructions
+                Instructions = SocInvestigatorPrompts.DefaultSystemInstructions,
+                PreviousResponseId = previousResponseId
             };
 
             requestOptions.InputItems.Add(OpenAI.Responses.ResponseItem.CreateUserMessageItem(message));
 
             var response = await responsesClient.CreateResponseAsync(requestOptions, cancellationToken);
 
-            return Result<ChatResponse>.Success(new ChatResponse(response.Value.GetOutputText()));
+            return Result<ChatResponse>.Success(new ChatResponse(response.Value.GetOutputText(), response.Value.Id));
         }
         catch (Exception exception)
         {

@@ -8,6 +8,6 @@ public sealed class AskChatHandler(IAIChatService chatService)
 {
     public Task<Result<ChatResponse>> Handle(AskChat command, CancellationToken cancellationToken)
     {
-        return chatService.AskAsync(command.Message, cancellationToken);
+        return chatService.AskAsync(command.Message, command.PreviousResponseId, cancellationToken);
     }
 }

@@ -14,19 +14,23 @@ namespace AISocInvestigator.Infrastructure.Services;
 
 public sealed class SocAgentService(AIProjectClient aiProjectClient, IOptions<FoundryOptions> options, ILogger<SocAgentService> logger) : IAIAgentService
 {
-    public async Task<Result<ChatResponse>> ExecuteAsync(string message, CancellationToken cancellationToken = default)
+    public async Task<Result<ChatResponse>> ExecuteAsync(string message, string? previousResponseId, CancellationToken cancellationToken = default)
     {
         try
         {
             var agentReference = new AgentReference(name: options.Value.AgentName);
             var responsesClient = aiProjectClient.ProjectOpenAIClient.GetProjectResponsesClientForAgent(agentReference);
 
-            var requestOptions = new CreateResponseOptions();
+            var requestOptions = new CreateResponseOptions
+            {
+                PreviousResponseId = previousResponseId
+            };
+
             requestOptions.InputItems.Add(ResponseItem.CreateUserMessageItem(message));
 
             var response = await responsesClient.CreateResponseAsync(requestOptions, cancellationToken);
 
-            return Result<ChatResponse>.Success(new ChatResponse(response.Value.GetOutputText()));
+            return Result<ChatResponse>.Success(new ChatResponse(response.Value.GetOutputText(), response.Value.Id));
         }
         catch (Exception exception)
         {

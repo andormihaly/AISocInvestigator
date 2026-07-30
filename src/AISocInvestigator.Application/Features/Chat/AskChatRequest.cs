@@ -1,6 +1,4 @@
-﻿namespace AISocInvestigator.Application.Features.Agent;
-
-public sealed class ExecuteAgentRequest
+﻿public sealed class AskChatRequest
 {
     public required string Message { get; init; }
 

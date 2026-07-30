@@ -1,0 +1,109 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "SOC Investigator Sentinel API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "aisocinvestigator-functions-epfdfzcvbsd8f4c0.westeurope-01.azurewebsites.net/api"
+    }
+  ],
+  "paths": {
+    "/incidents": {
+      "get": {
+        "operationId": "get_incidents",
+        "summary": "Get Microsoft Sentinel incidents",
+        "description": "Returns Microsoft Sentinel incidents.",
+        "responses": {
+          "200": {
+            "description": "The incidents were returned successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Incident"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/incidents/{id}": {
+      "get": {
+        "operationId": "get_incident",
+        "summary": "Get a Microsoft Sentinel incident by ID",
+        "description": "Returns one Sentinel incident.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The Sentinel incident identifier.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The incident was returned successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Incident"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The incident was not found."
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "functionKeyHeader": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "functionKeyHeader": {
+        "type": "apiKey",
+        "name": "x-functions-key",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "Incident": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
