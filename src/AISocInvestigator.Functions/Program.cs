@@ -2,12 +2,13 @@ using AISocInvestigator.Functions.Authentication;
 using AISocInvestigator.Functions.Clients;
 using AISocInvestigator.Functions.Configuration;
 using AISocInvestigator.Functions.Services;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
+using Azure.ResourceManager;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Azure.Extensions.AspNetCore.Configuration.Secrets;
-using Microsoft.Extensions.Configuration;
 
 namespace AISocInvestigator.Functions 
 {
@@ -32,9 +33,8 @@ namespace AISocInvestigator.Functions
                     services.AddHttpClient();
                     services.AddSingleton<IIncidentService, IncidentService>();
                     services.AddSingleton<ISentinelClient, SentinelClient>();
-                    services.AddSingleton<IAccessTokenProvider, AccessTokenProvider>();
                     services.Configure<SentinelOptions>(context.Configuration.GetSection("Sentinel"));
-
+                    services.AddSingleton(new ArmClient(new DefaultAzureCredential()));
 
                 })
                 .Build();

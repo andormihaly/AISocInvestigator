@@ -1,45 +1,52 @@
 ﻿using AISocInvestigator.Domain.Incidents;
-using AISocInvestigator.Functions.Authentication;
 using AISocInvestigator.Functions.Configuration;
 using Azure.Core;
 using Azure.Identity;
 using Azure.ResourceManager;
 using Azure.ResourceManager.SecurityInsights;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Net.Http.Json;
 
 namespace AISocInvestigator.Functions.Clients;
 
-public class SentinelClient(IHttpClientFactory httpClientFactory, IAccessTokenProvider accessTokenProvider, IOptions<SentinelOptions> sentinelOptions) : ISentinelClient
+public class SentinelClient (ArmClient armClient, IOptions<SentinelOptions> sentinelOptions, ILogger<SentinelClient> logger) : ISentinelClient
 {
     public async Task<Incident?> GetIncidentAsync(string id)
     {
-        var resourceId =
-            SecurityInsightsIncidentResource.CreateResourceIdentifier(
-                sentinelOptions.Value.SentinelSubscriptionId,
-                sentinelOptions.Value.ResourceGroupName,
-                sentinelOptions.Value.WorkspaceName,
-                id);
-
-        var armClient = new ArmClient(new DefaultAzureCredential());
-
-        var incidentResource = armClient.GetSecurityInsightsIncidentResource(resourceId);
-
-        var response = await incidentResource.GetAsync();
-
-        var sentinelIncident = response.Value.Data;
-
-        return new Incident
+        try
         {
-            Id = sentinelIncident.Name,
-            Title = sentinelIncident.Title,
-            Severity = sentinelIncident.Severity.ToString(),
-            Status = sentinelIncident.Status.ToString(),
-            Description = sentinelIncident.Description,
-            CreatedAt = sentinelIncident.CreatedOn?.UtcDateTime ?? DateTime.UtcNow,
-            User = string.Empty,
-            SourceIp = string.Empty
-        };
+            var resourceId =
+                       SecurityInsightsIncidentResource.CreateResourceIdentifier(
+                           sentinelOptions.Value.SentinelSubscriptionId,
+                           sentinelOptions.Value.ResourceGroupName,
+                           sentinelOptions.Value.WorkspaceName,
+                           id);
+
+            var incidentResource = armClient.GetSecurityInsightsIncidentResource(resourceId);
+
+            var response = await incidentResource.GetAsync();
+
+            var sentinelIncident = response.Value.Data;
+
+            return new Incident
+            {
+                Id = sentinelIncident.Name,
+                Title = sentinelIncident.Title,
+                Severity = sentinelIncident.Severity.ToString(),
+                Status = sentinelIncident.Status.ToString(),
+                Description = sentinelIncident.Description,
+                CreatedAt = sentinelIncident.CreatedOn?.UtcDateTime ?? DateTime.UtcNow,
+                User = string.Empty,
+                SourceIp = string.Empty
+            };
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to retrieve Sentinel incidents.");
+
+            throw;
+        }
+       
     }
 
     public async Task<IReadOnlyList<Incident>> GetIncidentsAsync()
@@ -79,8 +86,7 @@ public class SentinelClient(IHttpClientFactory httpClientFactory, IAccessTokenPr
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Failed to retrieve Sentinel incidents.");
-            Console.WriteLine(ex);
+            logger.LogError(ex, "Failed to retrieve Sentinel incidents.");
 
             throw;
         }
