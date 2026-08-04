@@ -2,9 +2,9 @@
 
 An AI-103 learning project focused on building a modern AI-powered Security Operations Center (SOC) assistant using Microsoft Azure AI Foundry.
 
-The goal of this project is to progressively build an intelligent security investigator capable of analyzing incidents, retrieving evidence, orchestrating multiple AI agents, and supporting security analysts throughout the investigation process.
+The project demonstrates how Large Language Models, AI Agents, Azure AI Search, Azure Functions, and Microsoft Sentinel can be combined to build an intelligent SOC investigation platform.
 
-The project follows a six-week implementation plan that aligns with the Microsoft AI-103 certification topics while producing a real-world portfolio application.
+The long-term goal is to evolve the solution into a multi-agent security investigation platform capable of orchestrating specialized AI agents that assist security analysts throughout the incident response lifecycle.
 
 ---
 
@@ -17,28 +17,69 @@ The project follows a six-week implementation plan that aligns with the Microsof
 - Azure AI Search
 - Azure Functions
 - Azure Blob Storage
-- LangGraph
-- Model Context Protocol (MCP)
+- Microsoft Sentinel
+- OpenAPI Tools
+- LangGraph (planned)
+- Model Context Protocol (planned)
 - Application Insights
+
+---
+
+## Current Features
+
+### AI Chat
+- GPT-5.4 integration
+- Multi-turn conversations using PreviousResponseId
+- Clean Architecture implementation
+
+### AI Agents
+
+#### SOC Incident Agent
+- Microsoft Sentinel integration
+- Azure Function tool
+- OpenAPI Tool Calling
+- Multi-turn conversations
+
+#### SOC Knowledge Agent
+- Azure AI Search
+- Retrieval-Augmented Generation (RAG)
+- Security documentation knowledge base
+- Semantic search over internal documentation
+
+### Azure Integration
+
+- Azure AI Foundry
+- Azure AI Search
+- Azure Blob Storage
+- Azure Functions
+- Microsoft Sentinel
 
 ---
 
 ## Architecture
 
 ```
-Client
-    │
-    ▼
-ASP.NET Core API
-    │
-    ▼
-Application Layer
-    │
-    ▼
-Infrastructure Layer
-    │
-    ▼
-Azure AI Foundry
+                           User
+                             │
+                             ▼
+                    ASP.NET Core API
+                             │
+                             ▼
+                  Application Layer
+                             │
+                             ▼
+                 Azure AI Foundry
+                             │
+          ┌──────────────────┴──────────────────┐
+          │                                     │
+          ▼                                     ▼
+   SOC Incident Agent                 SOC Knowledge Agent
+          │                                     │
+          ▼                                     ▼
+ Azure Function Tool                 Azure AI Search
+          │                                     │
+          ▼                                     ▼
+ Microsoft Sentinel              Security Documentation
 ```
 
 Current solution structure:
@@ -49,7 +90,11 @@ AISocInvestigator
 ├── src
 │   ├── AISocInvestigator.Api
 │   ├── AISocInvestigator.Application
-│   └── AISocInvestigator.Infrastructure
+│   ├── AISocInvestigator.Infrastructure
+│   ├── AISocInvestigator.Functions
+│   └── AISocInvestigator.Domain
+│
+├── docs
 │
 └── tests
 ```
@@ -64,25 +109,30 @@ AISocInvestigator
 - [x] Clean Architecture solution
 
 ### Week 1
-- [ ] Azure AI Foundry integration
-- [ ] Basic Security Assistant
-- [ ] Secure configuration
-- [ ] Initial architecture documentation
+- [x] Azure AI Foundry integration
+- [x] Basic Security Assistant
+- [x] Secure configuration
+- [x] Initial architecture documentation
 
 ### Week 2
-- [ ] AI Agents
-- [ ] Tool Calling
-- [ ] Azure AI Search
-- [ ] RAG
+- [x] AI Agents
+- [x] OpenAPI Tool Calling
+- [x] Azure Functions integration
+- [x] Microsoft Sentinel integration
+- [x] Azure AI Search
+- [x] Retrieval-Augmented Generation (RAG)
+- [x] Multi-turn conversations
+- [x] Knowledge Agent
+- [x] Incident Agent
 
 ### Week 3
-- [ ] Memory
-- [ ] Investigation Workflow
+- [ ] Agentic Workflow
+- [ ] Memory Management
 - [ ] Observability
 
 ### Week 4
 - [ ] LangGraph
-- [ ] MCP
+- [ ] Model Context Protocol (MCP)
 - [ ] Security Tools
 
 ### Week 5
@@ -91,7 +141,7 @@ AISocInvestigator
 - [ ] Evidence Platform
 
 ### Week 6
-- [ ] Multi-Agent Architecture
+- [ ] Multi-Agent Orchestration
 - [ ] Evaluation
 - [ ] Production Readiness
 
@@ -99,11 +149,24 @@ AISocInvestigator
 
 ## Current Status
 
-**Version:** Pre v0.1
+**Version:** v0.2
 
-The application currently contains the project structure and Azure AI Foundry configuration.
+### Completed
 
-The first milestone (v0.1) will provide a basic AI-powered SOC assistant capable of answering security-related questions.
+- Azure AI Foundry integration
+- GPT-5.4 chat service
+- AI Agent support
+- Microsoft Sentinel integration
+- Azure Function OpenAPI Tool
+- Azure AI Search integration
+- Retrieval-Augmented Generation (RAG)
+- Security documentation knowledge base
+- Multi-turn conversations
+- Clean Architecture implementation
+
+### Next Milestone
+
+Implement an Agentic Workflow capable of orchestrating multiple specialized AI agents to solve complex security investigation tasks.
 
 ---
 
@@ -112,9 +175,13 @@ The first milestone (v0.1) will provide a basic AI-powered SOC assistant capable
 - Microsoft AI-103
 - Azure AI Foundry
 - AI Agents
-- Tool Calling
+- Agentic Workflows
+- OpenAPI Tool Calling
+- Azure AI Search
+- Retrieval-Augmented Generation (RAG)
+- Microsoft Sentinel Integration
 - Model Context Protocol
-- Retrieval-Augmented Generation
+- LangGraph
 - Multi-Agent Systems
 - AI Evaluation
 - AI Observability
