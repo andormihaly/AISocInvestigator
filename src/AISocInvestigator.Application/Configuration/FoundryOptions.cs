@@ -6,5 +6,7 @@ public sealed class FoundryOptions
     public string DeploymentName { get; set; } = string.Empty;
     public string ProjectEndpoint { get; set; } = string.Empty;
     public string FoundryEndpoint { get; set; } = string.Empty;
-    public string AgentName { get; init; } = string.Empty;
+    public  string IntakeAgentName { get; init; }
+    public  string InvestigatorAgentName { get; init; }
+    public  string KnowledgeAgentName { get; init; }
 }

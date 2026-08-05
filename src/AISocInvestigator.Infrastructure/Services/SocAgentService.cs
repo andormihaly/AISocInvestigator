@@ -18,7 +18,7 @@ public sealed class SocAgentService(AIProjectClient aiProjectClient, IOptions<Fo
     {
         try
         {
-            var agentReference = new AgentReference(name: options.Value.AgentName);
+            var agentReference = new AgentReference(name: options.Value.InvestigatorAgentName);
             var responsesClient = aiProjectClient.ProjectOpenAIClient.GetProjectResponsesClientForAgent(agentReference);
 
             var requestOptions = new CreateResponseOptions
