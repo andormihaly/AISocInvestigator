@@ -3,12 +3,15 @@ using AISocInvestigator.Application.Features.Chat;
 using AISocInvestigator.Application.Interfaces;
 using AISocInvestigator.Infrastructure.AgentFramework;
 using AISocInvestigator.Infrastructure.Services;
+using AISocInvestigator.Infrastructure.Telemetry;
 using AISocInvestigator.Infrastructure.Workflows;
 using AISocInvestigator.Infrastructure.Workflows.Executors;
 using AISocInvestigator.Infrastructure.Workflows.Sessions;
 using Azure.AI.Projects;
 using Azure.Identity;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.Extensions.Options;
+using OpenTelemetry.Trace;
 using Scalar.AspNetCore;
 using Wolverine;
 
@@ -33,6 +36,13 @@ builder.Services.AddSingleton<AIProjectClient>(serviceProvider =>
 {
     var options = serviceProvider.GetRequiredService<IOptions<FoundryOptions>>();
     return new AIProjectClient(new Uri(options.Value.ProjectEndpoint), credential);
+});
+
+builder.Services.ConfigureOpenTelemetryTracerProvider((serviceProvider, tracing) => tracing.AddSource(TelemetryConstants.ActivitySourceName));
+
+builder.Services.AddOpenTelemetry().UseAzureMonitor(options =>
+{
+    options.ConnectionString = builder.Configuration["AzureMonitor:ConnectionString"] ?? throw new InvalidOperationException("Azure Monitor connection string is missing.");
 });
 
 builder.Services.AddMemoryCache();
