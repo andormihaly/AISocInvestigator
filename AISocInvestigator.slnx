@@ -5,5 +5,6 @@
     <Project Path="src/AISocInvestigator.Domain/AISocInvestigator.Domain.csproj" />
     <Project Path="src/AISocInvestigator.Functions/AISocInvestigator.Functions.csproj" Id="0a83574e-e69a-498d-9c47-69dfd1fc23ad" />
     <Project Path="src/AISocInvestigator.Infrastructure/AISocInvestigator.Infrastructure.csproj" />
+    <Project Path="src/AISocInvestigator.SecurityMcpServer/AISocInvestigator.SecurityMcpServer.csproj" />
   </Folder>
 </Solution>
