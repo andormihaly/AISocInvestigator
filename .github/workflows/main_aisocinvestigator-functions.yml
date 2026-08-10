@@ -7,6 +7,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'src/AISocInvestigator.Functions/**'
+      - '.github/workflows/main_aisocinvestigator-functions.yml' 
   workflow_dispatch:
 
 env:
