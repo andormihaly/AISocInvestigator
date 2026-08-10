@@ -1,20 +1,16 @@
-﻿using ModelContextProtocol.Server;
+﻿using AISocInvestigator.SecurityMcpServer.Services.ServerInfo;
+using ModelContextProtocol.Server;
 using System.ComponentModel;
 
 namespace AISocInvestigator.SecurityMcpServer.Tools.Ping;
 
 [McpServerToolType]
-public sealed class PingTool
+public sealed class PingTool(IServerInfoService serverInfoService)
 {
     [McpServerTool]
     [Description("Checks whether the Security MCP Server is available.")]
     public object Ping()
     {
-        return new
-        {
-            Status = "ok",
-            Service = "AI SOC Investigator Security MCP Server",
-            Timestamp = DateTimeOffset.UtcNow
-        };
+        return serverInfoService.GetStatus();
     }
 }
