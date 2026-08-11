@@ -13,6 +13,8 @@ public sealed class FoundryAgentFactory(AIProjectClient projectClient, IOptions<
 
     public Task<AIAgent> GetInvestigatorAgentAsync(CancellationToken cancellationToken = default) => GetAgentAsync(options.Value.InvestigatorAgentName, cancellationToken);
 
+    public Task<AIAgent> GetInvestigatorMCPAgentAsync(CancellationToken cancellationToken = default) => GetAgentAsync(options.Value.InvestigatorMCPAgentName, cancellationToken);
+
     public Task<AIAgent> GetKnowledgeAgentAsync(CancellationToken cancellationToken = default) => GetAgentAsync(options.Value.KnowledgeAgentName, cancellationToken);
 
     private async Task<AIAgent> GetAgentAsync(string agentName, CancellationToken cancellationToken)

@@ -55,6 +55,7 @@ builder.Services.AddSingleton<IAgentFactory, FoundryAgentFactory>();
 builder.Services.AddSingleton<IntakeExecutor>();
 builder.Services.AddSingleton<InvestigatorExecutor>();
 builder.Services.AddSingleton<KnowledgeExecutor>();
+builder.Services.AddSingleton<InvestigatorMCPExecutor>();
 builder.Services.AddSingleton<SocWorkflowDefinition>();
 builder.Services.AddSingleton<IWorkflowRunner, WorkflowRunner>();
 builder.Services.AddSingleton<ISocWorkflow, SocWorkflow>();

@@ -9,5 +9,7 @@ public interface IAgentFactory
 
     Task<AIAgent> GetInvestigatorAgentAsync(CancellationToken cancellationToken = default);
 
+    Task<AIAgent> GetInvestigatorMCPAgentAsync(CancellationToken cancellationToken = default);
+
     Task<AIAgent> GetKnowledgeAgentAsync(CancellationToken cancellationToken = default);
 }
