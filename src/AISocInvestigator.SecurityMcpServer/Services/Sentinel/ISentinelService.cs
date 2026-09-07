@@ -7,4 +7,6 @@ public interface ISentinelService
     Task<IReadOnlyList<SentinelIncident>> GetIncidentsAsync();
 
     Task<SentinelIncident?> GetIncidentAsync(string id);
+
+    Task<SentinelIncident> CreateIncidentAsync(CreateIncidentRequest request);
 }

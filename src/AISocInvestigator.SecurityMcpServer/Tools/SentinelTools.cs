@@ -21,4 +21,13 @@ public sealed class SentinelTools(ISentinelService sentinelService)
     {
         return await sentinelService.GetIncidentAsync(incidentId);
     }
+
+    [McpServerTool]
+    [Description("Creates a new Microsoft Sentinel incident in the configured workspace.")]
+    public async Task<SentinelIncident> CreateIncident([Description("The title of the incident.")] string title, [Description("A detailed description of the incident.")] string description, [Description("The severity of the incident. Allowed values: High, Medium, Low, Informational.")] string severity)
+    {
+        var request = new CreateIncidentRequest(title, description, severity);
+
+        return await sentinelService.CreateIncidentAsync(request);
+    }
 }

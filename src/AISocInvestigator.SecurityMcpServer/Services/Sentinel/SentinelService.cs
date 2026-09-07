@@ -2,7 +2,7 @@
 
 namespace AISocInvestigator.SecurityMcpServer.Services.Sentinel;
 
-public sealed class SentinelService( ISentinelClient sentinelClient) : ISentinelService
+public sealed class SentinelService(ISentinelClient sentinelClient) : ISentinelService
 {
     public async Task<IReadOnlyList<SentinelIncident>> GetIncidentsAsync()
     {
@@ -12,5 +12,10 @@ public sealed class SentinelService( ISentinelClient sentinelClient) : ISentinel
     public async Task<SentinelIncident?> GetIncidentAsync(string id)
     {
         return await sentinelClient.GetIncidentAsync(id);
+    }
+
+    public async Task<SentinelIncident> CreateIncidentAsync(CreateIncidentRequest request)
+    {
+        return await sentinelClient.CreateIncidentAsync(request);
     }
 }
