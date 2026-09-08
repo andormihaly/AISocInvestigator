@@ -38,4 +38,38 @@ public sealed class GraphClient(GraphServiceClient graphServiceClient) : IGraphC
             alert.Category,
             alert.AlertWebUrl);
     }
+    public async Task<IReadOnlyList<DefenderAlert>> GetAlertsAsync()
+    {
+        var response = await graphServiceClient.Security.Alerts_v2.GetAsync();
+
+        if (response?.Value is null)
+        {
+            return [];
+        }
+
+        return response.Value.Select(alert => new DefenderAlert(
+            alert.Id ?? string.Empty,
+            alert.Title ?? string.Empty,
+            alert.Severity?.ToString() ?? "Unknown",
+            alert.Status?.ToString() ?? "Unknown",
+            alert.Category,
+            alert.AlertWebUrl)).ToList();
+    }
+    public async Task<DefenderAlert?> GetAlertAsync(string alertId)
+    {
+        var alert = await graphServiceClient.Security.Alerts_v2[alertId].GetAsync();
+
+        if (alert is null)
+        {
+            return null;
+        }
+
+        return new DefenderAlert(
+            alert.Id ?? string.Empty,
+            alert.Title ?? string.Empty,
+            alert.Severity?.ToString() ?? "Unknown",
+            alert.Status?.ToString() ?? "Unknown",
+            alert.Category,
+            alert.AlertWebUrl);
+    }
 }

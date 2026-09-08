@@ -1,9 +1,10 @@
 ﻿using AISocInvestigator.SecurityMcpServer.Models;
 
-namespace AISocInvestigator.SecurityMcpServer.Services.Graph
+namespace AISocInvestigator.SecurityMcpServer.Services.Graph;
+
+public interface IGraphClient
 {
-    public interface IGraphClient
-    {
-        Task<DefenderAlert> CreateAlertAsync(CreateAlertRequest request);
-    }
+    Task<DefenderAlert> CreateAlertAsync(CreateAlertRequest request);
+    Task<IReadOnlyList<DefenderAlert>> GetAlertsAsync();
+    Task<DefenderAlert?> GetAlertAsync(string alertId);
 }

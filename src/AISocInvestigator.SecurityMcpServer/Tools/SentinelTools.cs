@@ -38,4 +38,20 @@ public sealed class SentinelTools(ISentinelService sentinelService, IAlertServic
 
         return await alertService.CreateAlertAsync(request);
     }
+
+
+    [McpServerTool]
+    [Description("Returns Microsoft Defender alerts.")]
+    public async Task<IReadOnlyList<DefenderAlert>> GetAlerts()
+    {
+        return await alertService.GetAlertsAsync();
+    }
+
+    [McpServerTool]
+    [Description("Returns a Microsoft Defender alert by alert ID.")]
+    public async Task<DefenderAlert?> GetAlert(
+        [Description("The Microsoft Defender alert ID.")] string alertId)
+    {
+        return await alertService.GetAlertAsync(alertId);
+    }
 }
