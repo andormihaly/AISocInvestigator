@@ -3,8 +3,7 @@
 public enum WorkflowIntent
 {
     Investigation,
-    Knowledge,
-    Unsupported
+    Knowledge
 }
 
 public sealed record IntakeResult(string WorkflowSessionId, WorkflowIntent Intent, string? IncidentId, string? Topic, string? UserGoal);

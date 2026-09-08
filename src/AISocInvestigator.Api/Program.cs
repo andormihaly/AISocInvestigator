@@ -15,6 +15,9 @@ using OpenTelemetry.Trace;
 using Scalar.AspNetCore;
 using Wolverine;
 
+
+AppContext.SetSwitch("Azure.Experimental.EnableGenAITracing", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -38,7 +41,11 @@ builder.Services.AddSingleton<AIProjectClient>(serviceProvider =>
     return new AIProjectClient(new Uri(options.Value.ProjectEndpoint), credential);
 });
 
-builder.Services.ConfigureOpenTelemetryTracerProvider((serviceProvider, tracing) => tracing.AddSource(TelemetryConstants.ActivitySourceName));
+builder.Services.ConfigureOpenTelemetryTracerProvider((serviceProvider, tracing) =>
+{
+    tracing.AddSource(TelemetryConstants.ActivitySourceName);
+    tracing.AddSource("Azure.AI.Projects.*");
+});
 
 builder.Services.AddOpenTelemetry().UseAzureMonitor(options =>
 {
@@ -52,13 +59,17 @@ builder.Services.AddScoped<IAIChatService, FoundryChatService>();
 builder.Services.AddScoped<IAIAgentService, SocAgentService>();
 builder.Services.AddSingleton<IAgentFactory, FoundryAgentFactory>();
 
-builder.Services.AddSingleton<IntakeExecutor>();
-builder.Services.AddSingleton<InvestigatorExecutor>();
-builder.Services.AddSingleton<KnowledgeExecutor>();
-builder.Services.AddSingleton<InvestigatorMCPExecutor>();
-builder.Services.AddSingleton<SocWorkflowDefinition>();
+builder.Services.AddTransient<IntakeExecutor>();
+builder.Services.AddTransient<InvestigatorExecutor>();
+builder.Services.AddTransient<KnowledgeExecutor>();
+builder.Services.AddTransient<InvestigatorMCPExecutor>();
+builder.Services.AddTransient<InvestigationResponseExecutor>();
+builder.Services.AddTransient<InvestigationActionExecutor>();
+builder.Services.AddTransient<SocWorkflowDefinition>();
+builder.Services.AddTransient<ISocWorkflow, SocWorkflow>();
+
 builder.Services.AddSingleton<IWorkflowRunner, WorkflowRunner>();
-builder.Services.AddSingleton<ISocWorkflow, SocWorkflow>();
+builder.Services.AddSingleton<IApprovalDecisionService, ApprovalDecisionService>();
 
 builder.Services.AddOpenApi();
 

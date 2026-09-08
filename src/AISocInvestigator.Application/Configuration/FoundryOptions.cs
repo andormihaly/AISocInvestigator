@@ -10,4 +10,6 @@ public sealed class FoundryOptions
     public  string InvestigatorAgentName { get; init; }
     public string InvestigatorMCPAgentName { get; init; }
     public  string KnowledgeAgentName { get; init; }
+
+    public string ApprovalAgentName { get; init; }
 }

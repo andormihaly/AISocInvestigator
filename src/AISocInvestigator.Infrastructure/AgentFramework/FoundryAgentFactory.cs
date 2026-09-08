@@ -8,6 +8,7 @@ namespace AISocInvestigator.Infrastructure.AgentFramework;
 
 public sealed class FoundryAgentFactory(AIProjectClient projectClient, IOptions<FoundryOptions> options) : IAgentFactory
 {
+    public Task<AIAgent> GetApprovalAgentAsync(CancellationToken cancellationToken = default) => GetAgentAsync(options.Value.ApprovalAgentName, cancellationToken);
 
     public Task<AIAgent> GetIntakeAgentAsync(CancellationToken cancellationToken = default) => GetAgentAsync(options.Value.IntakeAgentName, cancellationToken);
 
