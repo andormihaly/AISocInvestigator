@@ -7,6 +7,8 @@ using Azure.ResourceManager;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.AddAzureWebAppDiagnostics();
+
 var keyVaultUri = builder.Configuration["KeyVaultUri"] ?? throw new InvalidOperationException("KeyVaultUri configuration is missing.");
 
 var credential = builder.Environment.IsDevelopment()
