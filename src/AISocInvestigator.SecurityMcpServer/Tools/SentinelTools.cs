@@ -41,10 +41,11 @@ public sealed class SentinelTools(ISentinelService sentinelService, IAlertServic
 
 
     [McpServerTool]
-    [Description("Returns Microsoft Defender alerts.")]
-    public async Task<IReadOnlyList<DefenderAlert>> GetAlerts()
+    [Description("Returns Microsoft Defender alerts. Optionally filters alerts created from the specified date and time.")]
+    public async Task<IReadOnlyList<DefenderAlert>> GetAlerts(
+    [Description("Optional start date and time. Only alerts created at or after this time are returned.")] DateTimeOffset? from = null)
     {
-        return await alertService.GetAlertsAsync();
+        return await alertService.GetAlertsAsync(from);
     }
 
     [McpServerTool]

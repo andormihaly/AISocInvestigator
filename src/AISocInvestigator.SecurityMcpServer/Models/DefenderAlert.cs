@@ -6,4 +6,5 @@ public sealed record DefenderAlert(
     string Severity,
     string Status,
     string? Category,
+    DateTimeOffset? CreatedDateTime,
     string? AlertWebUrl);

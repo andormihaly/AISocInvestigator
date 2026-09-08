@@ -36,11 +36,18 @@ public sealed class GraphClient(GraphServiceClient graphServiceClient) : IGraphC
             alert.Severity?.ToString() ?? request.Severity,
             alert.Status?.ToString() ?? "Unknown",
             alert.Category,
+            alert.CreatedDateTime,
             alert.AlertWebUrl);
     }
-    public async Task<IReadOnlyList<DefenderAlert>> GetAlertsAsync()
+    public async Task<IReadOnlyList<DefenderAlert>> GetAlertsAsync(DateTimeOffset? from = null)
     {
-        var response = await graphServiceClient.Security.Alerts_v2.GetAsync();
+        var response = await graphServiceClient.Security.Alerts_v2.GetAsync(requestConfiguration =>
+        {
+            if (from.HasValue)
+            {
+                requestConfiguration.QueryParameters.Filter = $"createdDateTime ge {from.Value.UtcDateTime:yyyy-MM-ddTHH:mm:ssZ}";
+            }
+        });
 
         if (response?.Value is null)
         {
@@ -53,6 +60,7 @@ public sealed class GraphClient(GraphServiceClient graphServiceClient) : IGraphC
             alert.Severity?.ToString() ?? "Unknown",
             alert.Status?.ToString() ?? "Unknown",
             alert.Category,
+            alert.CreatedDateTime,
             alert.AlertWebUrl)).ToList();
     }
     public async Task<DefenderAlert?> GetAlertAsync(string alertId)
@@ -70,6 +78,7 @@ public sealed class GraphClient(GraphServiceClient graphServiceClient) : IGraphC
             alert.Severity?.ToString() ?? "Unknown",
             alert.Status?.ToString() ?? "Unknown",
             alert.Category,
+            alert.CreatedDateTime,
             alert.AlertWebUrl);
     }
 }

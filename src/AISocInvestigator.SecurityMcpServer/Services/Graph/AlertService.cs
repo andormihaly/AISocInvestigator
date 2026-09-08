@@ -10,9 +10,9 @@ public sealed class AlertService(IGraphClient graphClient) : IAlertService
         return await graphClient.CreateAlertAsync(request);
     }
 
-    public async Task<IReadOnlyList<DefenderAlert>> GetAlertsAsync()
+    public async Task<IReadOnlyList<DefenderAlert>> GetAlertsAsync(DateTimeOffset? from = null)
     {
-        return await graphClient.GetAlertsAsync();
+        return await graphClient.GetAlertsAsync(from);
     }
 
     public async Task<DefenderAlert?> GetAlertAsync(string alertId)
