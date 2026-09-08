@@ -14,8 +14,5 @@ public sealed class SentinelService(ISentinelClient sentinelClient) : ISentinelS
         return await sentinelClient.GetIncidentAsync(id);
     }
 
-    public async Task<SentinelIncident> CreateIncidentAsync(CreateIncidentRequest request)
-    {
-        return await sentinelClient.CreateIncidentAsync(request);
-    }
+   
 }

@@ -1,9 +1,12 @@
 using AISocInvestigator.SecurityMcpServer.Extensions;
+using AISocInvestigator.SecurityMcpServer.Services.Alert;
+using AISocInvestigator.SecurityMcpServer.Services.Graph;
 using AISocInvestigator.SecurityMcpServer.Services.Law;
 using AISocInvestigator.SecurityMcpServer.Services.LoginInvestigation;
 using Azure.Identity;
 using Azure.Monitor.Query;
 using Azure.ResourceManager;
+using Microsoft.Graph.Beta;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +28,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddSingleton(sp => new ArmClient(credential));
 builder.Services.AddSingleton(new LogsQueryClient(credential));
+builder.Services.AddSingleton(new GraphServiceClient(credential, ["https://graph.microsoft.com/.default"]));
 builder.Services.AddSingleton<ILoginInvestigationClient,LoginInvestigationClient>();
 builder.Services.AddSingleton< ILoginInvestigationService,LoginInvestigationService>();
+builder.Services.AddSingleton<IGraphClient, GraphClient>();
+builder.Services.AddSingleton<IAlertService, AlertService>();
 builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services

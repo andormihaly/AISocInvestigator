@@ -8,5 +8,4 @@ public interface ISentinelClient
 
     Task<IReadOnlyList<SentinelIncident>> GetIncidentsAsync();
 
-    Task<SentinelIncident> CreateIncidentAsync(CreateIncidentRequest request);
 }

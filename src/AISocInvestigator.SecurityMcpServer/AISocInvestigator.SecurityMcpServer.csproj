@@ -12,6 +12,7 @@
     <PackageReference Include="Azure.ResourceManager" Version="1.14.0" />
     <PackageReference Include="Azure.ResourceManager.SecurityInsights" Version="1.2.0-beta.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="10.0.11" />
+    <PackageReference Include="Microsoft.Graph.Beta" Version="6.6.0-preview" />
     <PackageReference Include="ModelContextProtocol.AspNetCore" Version="2.1.0" />
   </ItemGroup>
 

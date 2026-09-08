@@ -8,5 +8,4 @@ public interface ISentinelService
 
     Task<SentinelIncident?> GetIncidentAsync(string id);
 
-    Task<SentinelIncident> CreateIncidentAsync(CreateIncidentRequest request);
 }
